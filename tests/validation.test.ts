@@ -1,0 +1,5 @@
+import { describe, expect, it } from 'vitest';
+function validateAmount(amount:number){return Number.isFinite(amount)&&amount>=1000&&amount<=100000000;}
+function commission(type:'fixed'|'percentage',base:number,rate:number,max=Infinity){const value=type==='fixed'?rate:base*rate/100;if(!Number.isFinite(value)||value<0)throw new Error('invalid');return Math.round(Math.min(value,max)*100)/100;}
+describe('loan application validation',()=>{it('accepts an ordinary requested amount',()=>expect(validateAmount(50000)).toBe(true));it('rejects too-small, too-large and non-finite amounts',()=>{expect(validateAmount(999)).toBe(false);expect(validateAmount(100000001)).toBe(false);expect(validateAmount(Number.NaN)).toBe(false);});});
+describe('commission calculation',()=>{it('calculates fixed commissions',()=>expect(commission('fixed',100000,250)).toBe(250));it('calculates percentage commissions and respects cap',()=>expect(commission('percentage',100000,2,1500)).toBe(1500));it('rejects negative commission',()=>expect(()=>commission('fixed',100, -1)).toThrow());});
