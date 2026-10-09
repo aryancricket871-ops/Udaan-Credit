@@ -1,0 +1,4 @@
+export type ApplicationStatus = 'submitted'|'under_review'|'referred_to_lender'|'approved_by_lender'|'rejected_by_lender'|'disbursed'|'closed'|'needs_information';
+export type VerifiedAmount = { amount: number; currency: 'INR'; verificationStatus: 'verified'|'estimated'|'unverified'; source?: string; updatedAt: unknown };
+export type LoanApplication = { id: string; ownerUid: string; productId: string; requestedAmount: number; status: ApplicationStatus; referenceId: string; createdAt: unknown; updatedAt: unknown };
+export type LoanAccount = { id: string; ownerUid: string; lenderName: string; maskedAccountNumber?: string; sanctionedAmount?: VerifiedAmount; disbursedAmount?: VerifiedAmount; interestRate?: { value:number; kind:'fixed'|'variable'; verificationStatus:'verified'|'unverified' }; tenureMonths?: number; emiAmount?: VerifiedAmount; nextDueDate?: string; outstandingBalance?: VerifiedAmount; status: string; updatedAt: unknown };
