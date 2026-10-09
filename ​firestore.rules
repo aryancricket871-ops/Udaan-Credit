@@ -1,0 +1,12 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function staffCan(permission) { return request.auth != null && (request.auth.token.role == 'super_admin' || (request.auth.token.permissions is list && permission in request.auth.token.permissions)); }
+    match /public-assets/{fileName} {
+      allow read: if true;
+      allow write: if staffCan('website.manage') && request.resource.size < 5 * 1024 * 1024 && request.resource.contentType.matches('image/(jpeg|png|webp|svg\+xml)');
+    }
+    // Sensitive financial documents are intentionally not enabled in this initial version.
+    match /{allPaths=**} { allow read, write: if false; }
+  }
+}
